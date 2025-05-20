@@ -33,11 +33,16 @@ public class PlayerController : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerRagdoll = GetComponent<PlayerRagdoll>();
         playerInputs = GetComponent<PlayerInputs>();
+
+        playerInputs.onMove += playerMovement.GetDirection;
+        playerInputs.onSprint += playerMovement.GetSprint;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        playerInputs.onMove -= playerMovement.GetDirection;
+        playerInputs.onSprint -= playerMovement.GetSprint;
     }
+
+
 }

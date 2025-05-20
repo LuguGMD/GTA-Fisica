@@ -1,20 +1,68 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class PlayerMovement : MonoBehaviour
 {
-    private float movementSpeed;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float movementSpeedMaxWalk;
+    [SerializeField] private float movementSpeedMaxSprint;
+
+    private float currentMaxSpeed;
+
+    private Vector3 direction;
+    private Vector2 directionInput;
+    private bool isSprinting;
+
     private Rigidbody rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        currentMaxSpeed = movementSpeedMaxWalk;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        Move();
+        Rotate();
+    }
+
+    public void Move()
+    {
+        if (rb.linearVelocity.magnitude < currentMaxSpeed)
+        {
+            PointTowardsCamera();
+
+            rb.AddForce(direction * movementSpeed);
+        }
+    }
+
+    public void Rotate()
+    {
+        Quaternion rotation = transform.rotation;
+        transform.LookAt(transform.position + direction);
+        transform.rotation = Quaternion.Lerp(rotation, transform.rotation, rb.linearVelocity.magnitude*Time.deltaTime);
+    }
+
+    public void PointTowardsCamera()
+    {
+        this.direction = Camera.main.transform.forward * directionInput.y;
+        this.direction += Camera.main.transform.right * directionInput.x;
+        this.direction.y = 0;
+
+        this.direction = this.direction.normalized;
+    }
+
+    public void GetDirection(Vector2 directionInput)
+    {
+        this.directionInput = directionInput; 
+    }
+
+    public void GetSprint(float isSprinting)
+    {
+        this.isSprinting = isSprinting > 0.1;
+        currentMaxSpeed = this.isSprinting ? movementSpeedMaxSprint : movementSpeedMaxWalk;
     }
 }

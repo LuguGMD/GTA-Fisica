@@ -1,35 +1,46 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerInputs : MonoBehaviour
 {
-    private float horizontalInput;
-    private float verticalInput;
+    private InputSystem_Actions actions;
 
-    private bool doJumpInput;
-    private bool doInteractInput;
+    private Vector2 moveInput;
 
+    private float doJumpInput;
+    private float doSprintInput;
+    private float doInteractInput;
+
+
+    public Action<Vector2> onMove;
+    public Action<float> onSprint;
+    public Action<float> onJump;
+    public Action<float> onInteract;
+    
 
     #region Properties
 
-    public float getHotizontalInput
+    public Vector2 getMoveInput
     {
-        get { return horizontalInput; }
-        private set { horizontalInput = value; }
+        get { return moveInput; }
+        private set { moveInput = value; }
     }
 
-    public float getInteractInput
-    {
-        get { return verticalInput; }
-        private set { verticalInput = value; }
-    }
-
-    public bool getDoJumpInput
+    public float getDoJumpInput
     {
         get { return doJumpInput; }
         private set { doJumpInput = value; }
     }
 
-    public bool getDoInteractInput
+    public float getDoSprintInput
+    {
+        get { return doSprintInput; }
+        private set{ doSprintInput = value; }
+    }
+
+    public float getDoInteractInput
     {
         get { return doInteractInput; }
         private set { doInteractInput = value; }
@@ -37,9 +48,55 @@ public class PlayerInputs : MonoBehaviour
 
     #endregion
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        actions.Player.Move.performed += Move;
+        actions.Player.Move.canceled += Move;
+
+        actions.Player.Sprint.performed += Sprint;
+        actions.Player.Sprint.canceled += Sprint;
+
+        actions.Player.Jump.performed += Jump;
+        actions.Player.Jump.canceled += Jump;
+
+        actions.Player.Interact.performed += Interact;
+        actions.Player.Interact.canceled += Interact;
     }
+
+    private void OnEnable()
+    {
+        actions = new InputSystem_Actions();
+
+        actions.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        actions.Player.Disable();
+    }
+
+    private void Move(InputAction.CallbackContext context)
+    {
+        moveInput = context.ReadValue<Vector2>();
+        onMove?.Invoke(moveInput);
+    }
+
+    private void Sprint(InputAction.CallbackContext context)
+    {
+        doSprintInput = context.ReadValue<float>();
+        onSprint?.Invoke(doSprintInput);
+    }
+
+    private void Jump(InputAction.CallbackContext context)
+    {
+        doJumpInput = context.ReadValue<float>();
+        onJump?.Invoke(doJumpInput);
+    }
+
+    private void Interact(InputAction.CallbackContext context)
+    {
+        doInteractInput = context.ReadValue<float>();
+        onInteract?.Invoke(doInteractInput);
+    }
+
 }
