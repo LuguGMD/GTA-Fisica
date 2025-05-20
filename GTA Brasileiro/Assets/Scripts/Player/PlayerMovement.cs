@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+[RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(PlayerInputs))]
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 directionInput;
     private bool isSprinting;
 
-    private Rigidbody rb;
+    [HideInInspector] public Rigidbody rb;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

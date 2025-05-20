@@ -1,11 +1,12 @@
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerMovement), typeof(PlayerRagdoll), typeof(PlayerInputs))]
+[RequireComponent(typeof(PlayerMovement), typeof(PlayerRagdoll), typeof(PlayerAnimationsHandler))]
 public class PlayerController : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private PlayerRagdoll playerRagdoll;
     private PlayerInputs playerInputs;
+    private PlayerAnimationsHandler playerAnimations;
 
     #region Properties
 
@@ -33,6 +34,7 @@ public class PlayerController : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerRagdoll = GetComponent<PlayerRagdoll>();
         playerInputs = GetComponent<PlayerInputs>();
+        playerAnimations = GetComponent<PlayerAnimationsHandler>();
 
         playerInputs.onMove += playerMovement.GetDirection;
         playerInputs.onSprint += playerMovement.GetSprint;
@@ -42,6 +44,11 @@ public class PlayerController : MonoBehaviour
     {
         playerInputs.onMove -= playerMovement.GetDirection;
         playerInputs.onSprint -= playerMovement.GetSprint;
+    }
+
+    private void Update()
+    {
+        playerAnimations.ChangeSpeedParameter(playerMovement.rb.linearVelocity.magnitude);
     }
 
 
