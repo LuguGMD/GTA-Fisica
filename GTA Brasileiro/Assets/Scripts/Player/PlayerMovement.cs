@@ -16,6 +16,16 @@ public class PlayerMovement : MonoBehaviour
 
     [HideInInspector] public Rigidbody rb;
 
+    #region Properties
+
+    public float getCurrentMaxSpeed
+    {
+        get { return currentMaxSpeed; }
+        private set { currentMaxSpeed = value; }
+    }
+
+    #endregion
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,6 +37,9 @@ public class PlayerMovement : MonoBehaviour
     {
         Move();
         Rotate();
+
+        float targetMaxSpeed = this.isSprinting ? movementSpeedMaxSprint : movementSpeedMaxWalk;
+        currentMaxSpeed = Mathf.Lerp(currentMaxSpeed, targetMaxSpeed, Time.deltaTime * 3);
     }
 
     public void Move()
@@ -63,6 +76,5 @@ public class PlayerMovement : MonoBehaviour
     public void GetSprint(float isSprinting)
     {
         this.isSprinting = isSprinting > 0.1;
-        currentMaxSpeed = this.isSprinting ? movementSpeedMaxSprint : movementSpeedMaxWalk;
     }
 }

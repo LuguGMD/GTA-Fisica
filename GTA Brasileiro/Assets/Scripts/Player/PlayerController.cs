@@ -48,7 +48,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        playerAnimations.ChangeSpeedParameter(playerMovement.rb.linearVelocity.magnitude);
+        float speed = Mathf.Clamp(playerMovement.rb.linearVelocity.magnitude, 0, playerMovement.getCurrentMaxSpeed);
+        playerAnimations.ChangeSpeedParameter(speed);
     }
 
 
