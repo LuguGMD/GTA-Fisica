@@ -5,6 +5,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     private bool isRagdollActive = false;
     [SerializeField] private Rigidbody[] ragdollRbs;
+    private Collider[] ragdollCols;
 
     #region Properties
 
@@ -22,15 +23,32 @@ public class PlayerRagdoll : MonoBehaviour
 
     #endregion
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
+        ragdollCols = new Collider[ragdollRbs.Length];
+        for (int i = 0; i < ragdollRbs.Length; i++)
+        {
+            ragdollCols[i] = ragdollRbs[i].GetComponent<Collider>();
+        }
+
+        DeactivateRagdoll();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ActivateRagdoll()
     {
-        
+        for (int i = 0; i < ragdollRbs.Length; i++)
+        {
+            ragdollRbs[i].isKinematic = true;
+            ragdollCols[i].isTrigger = true;
+        }
+    }
+
+    public void DeactivateRagdoll()
+    {
+        for (int i = 0; i < ragdollRbs.Length; i++)
+        {
+            ragdollRbs[i].isKinematic = false;
+            ragdollCols[i].isTrigger = false;
+        }
     }
 }
