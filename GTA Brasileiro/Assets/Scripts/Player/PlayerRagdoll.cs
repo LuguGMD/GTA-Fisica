@@ -63,4 +63,12 @@ public class PlayerRagdoll : MonoBehaviour
 
         ActionsManager.Instance.onPlayerRagdollDeactivate?.Invoke();
     }
+
+    public void LaunchRagdoll(float force, Vector3 dir)
+    {
+        //Spine
+        ragdollRbs[1].linearVelocity = dir * force;
+        //Hips
+        ragdollRbs[2].linearVelocity = dir * force;
+    }
 }

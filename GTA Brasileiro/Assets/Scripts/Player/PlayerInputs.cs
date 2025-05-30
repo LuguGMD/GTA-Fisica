@@ -43,18 +43,6 @@ public class PlayerInputs : MonoBehaviour
 
     private void Start()
     {
-        actions.Player.Move.performed += Move;
-        actions.Player.Move.canceled += Move;
-
-        actions.Player.Sprint.performed += Sprint;
-        actions.Player.Sprint.canceled += Sprint;
-
-        actions.Player.Jump.performed += Jump;
-        actions.Player.Jump.canceled += Jump;
-
-        actions.Player.Interact.performed += Interact;
-        actions.Player.Interact.canceled += Interact;
-
         ActionsManager.Instance.onPlayerDeath += DisableInputs;
     }
 
@@ -62,13 +50,13 @@ public class PlayerInputs : MonoBehaviour
     {
         actions = new InputSystem_Actions();
 
-        actions.Player.Enable();
+        EnableInputs();
     }
 
     private void OnDisable()
     {
+        DisableInputs();
         ActionsManager.Instance.onPlayerDeath -= DisableInputs;
-        actions.Player.Disable();
     }
 
     private void Move(InputAction.CallbackContext context)
@@ -93,16 +81,44 @@ public class PlayerInputs : MonoBehaviour
     {
         doInteractInput = context.ReadValue<float>();
         ActionsManager.Instance.onPlayerInteractInput?.Invoke(doInteractInput);
+        
+        //DEBUG REMOVE
+        Debug.LogWarning("Remove This");
+        ActionsManager.Instance.onPlayerDeath.Invoke();
     }
 
     public void DisableInputs()
     {
+        actions.Player.Move.performed -= Move;
+        actions.Player.Move.canceled -= Move;
+
+        actions.Player.Sprint.performed -= Sprint;
+        actions.Player.Sprint.canceled -= Sprint;
+
+        actions.Player.Jump.performed -= Jump;
+        actions.Player.Jump.canceled -= Jump;
+
+        actions.Player.Interact.performed -= Interact;
+        actions.Player.Interact.canceled -= Interact;
+
         actions.Player.Disable();
     }
 
     public void EnableInputs()
     {
         actions.Player.Enable();
+
+        actions.Player.Move.performed += Move;
+        actions.Player.Move.canceled += Move;
+
+        actions.Player.Sprint.performed += Sprint;
+        actions.Player.Sprint.canceled += Sprint;
+
+        actions.Player.Jump.performed += Jump;
+        actions.Player.Jump.canceled += Jump;
+
+        actions.Player.Interact.performed += Interact;
+        actions.Player.Interact.canceled += Interact;
     }
 
 }

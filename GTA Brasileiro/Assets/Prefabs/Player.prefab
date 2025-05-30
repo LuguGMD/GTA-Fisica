@@ -513,10 +513,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.21304077
-  m_Height: 0.96157193
+  m_Radius: 0.0940426
+  m_Height: 0.7223072
   m_Direction: 1
-  m_Center: {x: 0.008879874, y: 0.49302897, z: -0.031780124}
+  m_Center: {x: 0.010605896, y: 0.48239225, z: -0.049646497}
 --- !u!54 &2384061519938250264
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -816,10 +816,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.2527369
-  m_Height: 1.0109476
+  m_Radius: 0.11661542
+  m_Height: 0.8010987
   m_Direction: 1
-  m_Center: {x: 0, y: 0.5054738, z: 0}
+  m_Center: {x: -0.041955534, y: 0.48586753, z: -0.03454165}
 --- !u!54 &2252349122968373906
 Rigidbody:
   m_ObjectHideFlags: 0

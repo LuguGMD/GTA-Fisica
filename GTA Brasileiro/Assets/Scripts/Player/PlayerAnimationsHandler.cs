@@ -10,6 +10,8 @@ public class PlayerAnimationsHandler : MonoBehaviour
     {
         animator = transform.GetComponentInChildren<Animator>();
 
+        EnableAnimator();
+
         ActionsManager.Instance.onPlayerRagdollActivate += DisableAnimator;
     }
 
@@ -20,7 +22,11 @@ public class PlayerAnimationsHandler : MonoBehaviour
 
     private void Update()
     {
-        animator.SetFloat("Speed", speed);
+        if (animator != null)
+        {
+            if(animator.enabled)
+            animator.SetFloat("Speed", speed);
+        }
     }
 
     public void ChangeSpeedParameter(float speed)
@@ -30,11 +36,13 @@ public class PlayerAnimationsHandler : MonoBehaviour
 
     public void DisableAnimator()
     {
-        animator.enabled = false;
+        if (animator != null)
+            animator.enabled = false;
     }
 
     public void EnableAnimator()
     {
-        animator.enabled = true;
+        if (animator != null)
+            animator.enabled = true;
     }
 }
