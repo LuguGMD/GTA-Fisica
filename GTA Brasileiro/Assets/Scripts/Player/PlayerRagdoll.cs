@@ -32,23 +32,35 @@ public class PlayerRagdoll : MonoBehaviour
         }
 
         DeactivateRagdoll();
+
+        ActionsManager.Instance.onPlayerDeath += ActivateRagdoll;
     }
 
-    public void ActivateRagdoll()
+    private void OnDisable()
     {
-        for (int i = 0; i < ragdollRbs.Length; i++)
-        {
-            ragdollRbs[i].isKinematic = true;
-            ragdollCols[i].isTrigger = true;
-        }
+        ActionsManager.Instance.onPlayerDeath -= ActivateRagdoll;
     }
 
-    public void DeactivateRagdoll()
+    [ContextMenu("Activate Ragdoll")]
+    public void ActivateRagdoll()
     {
         for (int i = 0; i < ragdollRbs.Length; i++)
         {
             ragdollRbs[i].isKinematic = false;
             ragdollCols[i].isTrigger = false;
         }
+
+        ActionsManager.Instance.onPlayerRagdollActivate?.Invoke();
+    }
+
+    public void DeactivateRagdoll()
+    {
+        for (int i = 0; i < ragdollRbs.Length; i++)
+        {
+            ragdollRbs[i].isKinematic = true;
+            ragdollCols[i].isTrigger = true;
+        }
+
+        ActionsManager.Instance.onPlayerRagdollDeactivate?.Invoke();
     }
 }

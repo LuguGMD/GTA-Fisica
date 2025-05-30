@@ -13,13 +13,6 @@ public class PlayerInputs : MonoBehaviour
     private float doSprintInput;
     private float doInteractInput;
 
-
-    public Action<Vector2> onMove;
-    public Action<float> onSprint;
-    public Action<float> onJump;
-    public Action<float> onInteract;
-    
-
     #region Properties
 
     public Vector2 getMoveInput
@@ -61,6 +54,8 @@ public class PlayerInputs : MonoBehaviour
 
         actions.Player.Interact.performed += Interact;
         actions.Player.Interact.canceled += Interact;
+
+        ActionsManager.Instance.onPlayerDeath += DisableInputs;
     }
 
     private void OnEnable()
@@ -72,31 +67,42 @@ public class PlayerInputs : MonoBehaviour
 
     private void OnDisable()
     {
+        ActionsManager.Instance.onPlayerDeath -= DisableInputs;
         actions.Player.Disable();
     }
 
     private void Move(InputAction.CallbackContext context)
     {
         moveInput = context.ReadValue<Vector2>();
-        onMove?.Invoke(moveInput);
+        ActionsManager.Instance.onPlayerMoveInput?.Invoke(moveInput);
     }
 
     private void Sprint(InputAction.CallbackContext context)
     {
         doSprintInput = context.ReadValue<float>();
-        onSprint?.Invoke(doSprintInput);
+        ActionsManager.Instance.onPlayerSprintInput?.Invoke(doSprintInput);
     }
 
     private void Jump(InputAction.CallbackContext context)
     {
         doJumpInput = context.ReadValue<float>();
-        onJump?.Invoke(doJumpInput);
+        ActionsManager.Instance.onPlayerJumpInput?.Invoke(doJumpInput);
     }
 
     private void Interact(InputAction.CallbackContext context)
     {
         doInteractInput = context.ReadValue<float>();
-        onInteract?.Invoke(doInteractInput);
+        ActionsManager.Instance.onPlayerInteractInput?.Invoke(doInteractInput);
+    }
+
+    public void DisableInputs()
+    {
+        actions.Player.Disable();
+    }
+
+    public void EnableInputs()
+    {
+        actions.Player.Enable();
     }
 
 }
