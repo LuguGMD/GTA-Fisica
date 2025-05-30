@@ -4,6 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody), typeof(Collider), typeof(PlayerInputs))]
 public class PlayerMovement : MonoBehaviour
 {
+    private PlayerController controller;
+
     [SerializeField] private float movementSpeed;
     [SerializeField] private float movementSpeedMaxWalk;
     [SerializeField] private float movementSpeedMaxSprint;
@@ -32,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        controller = GetComponent<PlayerController>();
+
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
 
@@ -47,6 +51,9 @@ public class PlayerMovement : MonoBehaviour
 
         ActionsManager.Instance.onPlayerRagdollActivate += DisableMovement;
         ActionsManager.Instance.onPlayerRagdollDeactivate += EnableMovement;
+
+        ActionsManager.Instance.onPlayerMoveInput += GetDirection;
+        ActionsManager.Instance.onPlayerSprintInput += GetSprint;
     }
 
     private void OnDisable()
@@ -61,6 +68,9 @@ public class PlayerMovement : MonoBehaviour
 
         ActionsManager.Instance.onPlayerRagdollActivate -= DisableMovement;
         ActionsManager.Instance.onPlayerRagdollDeactivate -= EnableMovement;
+
+        ActionsManager.Instance.onPlayerMoveInput -= GetDirection;
+        ActionsManager.Instance.onPlayerSprintInput -= GetSprint;
     }
 
     private void Update()
@@ -83,6 +93,9 @@ public class PlayerMovement : MonoBehaviour
 
             rb.AddForce(direction * movementSpeed);
         }
+
+        controller.getImpactSpeed = rb.linearVelocity.magnitude;
+        controller.getImpactDirection = rb.linearVelocity.normalized;
     }
 
     public void Rotate()

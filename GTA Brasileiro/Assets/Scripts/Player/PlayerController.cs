@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [RequireComponent(typeof(PlayerMovement), typeof(PlayerRagdoll), typeof(PlayerAnimationsHandler))]
 public class PlayerController : MonoBehaviour
@@ -6,6 +7,9 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerRagdoll playerRagdoll;
     private PlayerAnimationsHandler playerAnimations;
+
+    private float impactSpeed;
+    private Vector3 impactDirection = new Vector3();
 
     #region Properties
 
@@ -20,6 +24,17 @@ public class PlayerController : MonoBehaviour
         private set { playerRagdoll = value; }
     }
 
+    public float getImpactSpeed
+    {
+        get { return impactSpeed; }
+        set { impactSpeed = value; }
+    }
+    public Vector3 getImpactDirection
+    {
+        get { return impactDirection; }
+        set { impactDirection = value; }
+    }
+
     #endregion
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -29,14 +44,12 @@ public class PlayerController : MonoBehaviour
         playerRagdoll = GetComponent<PlayerRagdoll>();
         playerAnimations = GetComponent<PlayerAnimationsHandler>();
 
-        ActionsManager.Instance.onPlayerMoveInput += playerMovement.GetDirection;
-        ActionsManager.Instance.onPlayerSprintInput += playerMovement.GetSprint;
+        ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
     }
 
     private void OnDisable()
     {
-        ActionsManager.Instance.onPlayerMoveInput -= playerMovement.GetDirection;
-        ActionsManager.Instance.onPlayerSprintInput -= playerMovement.GetSprint;
+        ActionsManager.Instance.onPlayerRagdollActivate -= SendLaunchForceToRagdoll;
     }
 
     private void Update()
@@ -45,5 +58,10 @@ public class PlayerController : MonoBehaviour
         playerAnimations.ChangeSpeedParameter(speed);
     }
 
+
+    public void SendLaunchForceToRagdoll()
+    {
+        playerRagdoll.LaunchRagdoll(impactSpeed, impactDirection);
+    }
 
 }
