@@ -15,6 +15,9 @@ public class PlayerMovement : MonoBehaviour
     private bool isSprinting;
 
     [HideInInspector] public Rigidbody rb;
+    private CapsuleCollider col;
+
+    private bool isMovementEnabled = true;
 
     #region Properties
 
@@ -30,16 +33,46 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        col = GetComponent<CapsuleCollider>();
+
         currentMaxSpeed = movementSpeedMaxWalk;
+
+        ActionsManager.Instance.onPlayerEnterCar += DisableMovement;
+        ActionsManager.Instance.onPlayerExitCar += EnableMovement;
+
+        ActionsManager.Instance.onPlayerDeath += DisableMovement;
+
+        ActionsManager.Instance.onPlayerRagdollActivate += DisableCollider;
+        ActionsManager.Instance.onPlayerRagdollDeactivate += EnableCollider;
+
+        ActionsManager.Instance.onPlayerRagdollActivate += DisableMovement;
+        ActionsManager.Instance.onPlayerRagdollDeactivate += EnableMovement;
+    }
+
+    private void OnDisable()
+    {
+        ActionsManager.Instance.onPlayerEnterCar -= DisableMovement;
+        ActionsManager.Instance.onPlayerExitCar -= EnableMovement;
+
+        ActionsManager.Instance.onPlayerDeath -= DisableMovement;
+
+        ActionsManager.Instance.onPlayerRagdollActivate -= DisableCollider;
+        ActionsManager.Instance.onPlayerRagdollDeactivate -= EnableCollider;
+
+        ActionsManager.Instance.onPlayerRagdollActivate -= DisableMovement;
+        ActionsManager.Instance.onPlayerRagdollDeactivate -= EnableMovement;
     }
 
     private void Update()
     {
-        Move();
-        Rotate();
+        if(isMovementEnabled)
+        {
+            Move();
+            Rotate();
 
-        float targetMaxSpeed = this.isSprinting ? movementSpeedMaxSprint : movementSpeedMaxWalk;
-        currentMaxSpeed = Mathf.Lerp(currentMaxSpeed, targetMaxSpeed, Time.deltaTime * 3);
+            float targetMaxSpeed = this.isSprinting ? movementSpeedMaxSprint : movementSpeedMaxWalk;
+            currentMaxSpeed = Mathf.Lerp(currentMaxSpeed, targetMaxSpeed, Time.deltaTime * 3);
+        }
     }
 
     public void Move()
@@ -76,5 +109,27 @@ public class PlayerMovement : MonoBehaviour
     public void GetSprint(float isSprinting)
     {
         this.isSprinting = isSprinting > 0.1;
+    }
+
+    public void DisableMovement()
+    {
+        isMovementEnabled = false;
+    }
+
+    public void EnableMovement()
+    {
+        isMovementEnabled = true;
+    }
+
+    public void DisableCollider()
+    {
+        rb.isKinematic = true;
+        col.isTrigger = true;
+    }
+
+    public void EnableCollider()
+    {
+        rb.isKinematic = false;
+        col.isTrigger = false;
     }
 }

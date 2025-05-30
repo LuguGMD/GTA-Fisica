@@ -5,7 +5,6 @@ public class PlayerController : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private PlayerRagdoll playerRagdoll;
-    private PlayerInputs playerInputs;
     private PlayerAnimationsHandler playerAnimations;
 
     #region Properties
@@ -20,11 +19,6 @@ public class PlayerController : MonoBehaviour
         get { return playerRagdoll; }
         private set { playerRagdoll = value; }
     }
-    public PlayerInputs getPlayerInput
-    {
-        get { return playerInputs; }
-        private set { playerInputs = value; }
-    }
 
     #endregion
 
@@ -33,17 +27,16 @@ public class PlayerController : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerRagdoll = GetComponent<PlayerRagdoll>();
-        playerInputs = GetComponent<PlayerInputs>();
         playerAnimations = GetComponent<PlayerAnimationsHandler>();
 
-        playerInputs.onMove += playerMovement.GetDirection;
-        playerInputs.onSprint += playerMovement.GetSprint;
+        ActionsManager.Instance.onPlayerMoveInput += playerMovement.GetDirection;
+        ActionsManager.Instance.onPlayerSprintInput += playerMovement.GetSprint;
     }
 
     private void OnDisable()
     {
-        playerInputs.onMove -= playerMovement.GetDirection;
-        playerInputs.onSprint -= playerMovement.GetSprint;
+        ActionsManager.Instance.onPlayerMoveInput -= playerMovement.GetDirection;
+        ActionsManager.Instance.onPlayerSprintInput -= playerMovement.GetSprint;
     }
 
     private void Update()
