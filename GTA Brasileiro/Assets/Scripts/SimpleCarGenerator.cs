@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
@@ -11,6 +12,8 @@ using UnityEngine;
 public class SimpleCarGenerator : MonoBehaviour
 {
     public GameObject carParent;
+    [System.Obsolete]
+    public CinemachineVirtualCameraBase carCamera;
     [Header("Parâmetros do Corpo")]
     public Vector3 bodyScale = new Vector3(2f, 1f, 4f);
     public float bodyMass = 1500f;
@@ -33,6 +36,8 @@ public class SimpleCarGenerator : MonoBehaviour
     public float steeringMinAngleAtMaxSpeed = 10f;
     public float centerOfGravityOffset = -1f;
 
+
+    [System.Obsolete]
     void Start()
     {
         // 1) Criar o corpo principal (Cube)
@@ -42,6 +47,13 @@ public class SimpleCarGenerator : MonoBehaviour
         body.transform.localPosition = Vector3.zero;
         body.transform.localRotation = Quaternion.identity;
         body.transform.localScale = bodyScale;
+
+        // Faça a cinemachine camera seguir o carro, se necessário
+        carCamera.Follow = body.transform;
+        carCamera.LookAt = body.transform;
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
 
         if (bodyMaterial != null)
         {
