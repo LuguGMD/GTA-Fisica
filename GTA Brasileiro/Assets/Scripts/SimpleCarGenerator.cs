@@ -10,12 +10,14 @@ using UnityEngine;
 /// </summary>
 public class SimpleCarGenerator : MonoBehaviour
 {
+    public GameObject carParent;
     [Header("Parâmetros do Corpo")]
     public Vector3 bodyScale = new Vector3(2f, 1f, 4f);
     public float bodyMass = 1500f;
     public Material bodyMaterial;       // (opcional) material para o corpo
 
     [Header("Parâmetros das Rodas")]
+    public float wheelBaseY = 0.5f; // altura do centro da roda
     public float wheelRadius = 0.5f;
     public float wheelWidth = 0.3f;
     public float suspensionDistance = 0.2f;
@@ -36,7 +38,7 @@ public class SimpleCarGenerator : MonoBehaviour
         // 1) Criar o corpo principal (Cube)
         GameObject body = GameObject.CreatePrimitive(PrimitiveType.Cube);
         body.name = "CarBody";
-        body.transform.parent = this.transform;
+        body.transform.parent = carParent.transform;
         body.transform.localPosition = Vector3.zero;
         body.transform.localRotation = Quaternion.identity;
         body.transform.localScale = bodyScale;
@@ -93,7 +95,7 @@ public class SimpleCarGenerator : MonoBehaviour
 
             // A Y do WheelCollider deve ser a altura exata do centro da roda:
             float wheelY = wheelRadius; 
-            Vector3 worldOffset = new Vector3(wheelOffsets[i].x, wheelY, wheelOffsets[i].z);
+            Vector3 worldOffset = new Vector3(wheelOffsets[i].x, wheelY - wheelBaseY, wheelOffsets[i].z);
             // Como estamos colocando o carro em (0,0,0), basta localPosition = offset
             wheelGO.transform.localPosition = worldOffset;
             wheelGO.transform.localRotation = Quaternion.identity;
