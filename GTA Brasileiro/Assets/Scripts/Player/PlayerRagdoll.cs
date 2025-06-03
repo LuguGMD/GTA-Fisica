@@ -5,6 +5,7 @@ public class PlayerRagdoll : MonoBehaviour
 
     private bool isRagdollActive = false;
     [SerializeField] private Rigidbody[] ragdollRbs;
+    private Collider[] ragdollCols;
 
     #region Properties
 
@@ -22,15 +23,52 @@ public class PlayerRagdoll : MonoBehaviour
 
     #endregion
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        
+        ragdollCols = new Collider[ragdollRbs.Length];
+        for (int i = 0; i < ragdollRbs.Length; i++)
+        {
+            ragdollCols[i] = ragdollRbs[i].GetComponent<Collider>();
+        }
+
+        DeactivateRagdoll();
+
+        ActionsManager.Instance.onPlayerDeath += ActivateRagdoll;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        ActionsManager.Instance.onPlayerDeath -= ActivateRagdoll;
+    }
+
+    [ContextMenu("Activate Ragdoll")]
+    public void ActivateRagdoll()
+    {
+        for (int i = 0; i < ragdollRbs.Length; i++)
+        {
+            ragdollRbs[i].isKinematic = false;
+            ragdollCols[i].isTrigger = false;
+        }
+
+        ActionsManager.Instance.onPlayerRagdollActivate?.Invoke();
+    }
+
+    public void DeactivateRagdoll()
+    {
+        for (int i = 0; i < ragdollRbs.Length; i++)
+        {
+            ragdollRbs[i].isKinematic = true;
+            ragdollCols[i].isTrigger = true;
+        }
+
+        ActionsManager.Instance.onPlayerRagdollDeactivate?.Invoke();
+    }
+
+    public void LaunchRagdoll(float force, Vector3 dir)
+    {
+        //Spine
+        ragdollRbs[1].linearVelocity = dir * force;
+        //Hips
+        ragdollRbs[2].linearVelocity = dir * force;
     }
 }
