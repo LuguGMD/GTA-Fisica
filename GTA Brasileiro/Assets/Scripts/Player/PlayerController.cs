@@ -7,6 +7,10 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerRagdoll playerRagdoll;
     private PlayerAnimationsHandler playerAnimations;
+        [SerializeField]
+
+    private Unity.Cinemachine.CinemachineCamera freeLookCamera;
+
 
     private float impactSpeed;
     private Vector3 impactDirection = new Vector3();
@@ -43,7 +47,8 @@ public class PlayerController : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerRagdoll = GetComponent<PlayerRagdoll>();
         playerAnimations = GetComponent<PlayerAnimationsHandler>();
-
+ freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
+            freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
         ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
     }
 
@@ -63,5 +68,23 @@ public class PlayerController : MonoBehaviour
     {
         playerRagdoll.LaunchRagdoll(impactSpeed, impactDirection);
     }
+
+
+    public void EnterCar()
+    {
+        // Faça o mesh renderer do player ficar invisível
+        gameObject.SetActive(false);
+    }
+
+    public void ExitCar()
+    {
+        // Reative o mesh renderer do player
+        gameObject.SetActive(true);
+        transform.position =  new Vector3(transform.position.x, transform.position.y, transform.position.z - 5); // Ajusta a altura do player ao sair do carro
+            freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
+            freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
+
+    }
+
 
 }
