@@ -105,28 +105,31 @@ public class CarController : MonoBehaviour
 
         foreach (var wheel in wheels)
         {
-            WheelCollider wc = wheel.WheelCollider;
-
-            // Se for steerable, aplica steerAngle
-            if (wheel.steerable)
+            if (wheel != null)
             {
-                wc.steerAngle = hInput * currentSteer;
-            }
+                WheelCollider wc = wheel.WheelCollider;
 
-            if (isAccelerating)
-            {
-                // Se for motorized, aplica torque; solta freio
-                if (wheel.motorized)
+                // Se for steerable, aplica steerAngle
+                if (wheel.steerable)
                 {
-                    wc.motorTorque = vInput * currentMotor;
+                    wc.steerAngle = hInput * currentSteer;
                 }
-                wc.brakeTorque = 0f;
-            }
-            else
-            {
-                // Se mudando de sentido, zera motorTorque e aplica freio
-                wc.motorTorque = 0f;
-                wc.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
+
+                if (isAccelerating)
+                {
+                    // Se for motorized, aplica torque; solta freio
+                    if (wheel.motorized)
+                    {
+                        wc.motorTorque = vInput * currentMotor;
+                    }
+                    wc.brakeTorque = 0f;
+                }
+                else
+                {
+                    // Se mudando de sentido, zera motorTorque e aplica freio
+                    wc.motorTorque = 0f;
+                    wc.brakeTorque = Mathf.Abs(vInput) * brakeTorque;
+                }
             }
         }
     }
