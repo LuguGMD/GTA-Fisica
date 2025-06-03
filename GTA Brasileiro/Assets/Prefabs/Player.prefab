@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 1942640125635101919}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33,8 +33,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.58, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.37, y: 0.37, z: 0.37}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 388377923636334491}
   m_Father: {fileID: 0}
@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b6f866be2a817749a452b44ca6838ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  freeLookCamera: {fileID: 0}
 --- !u!114 &5934011518918773902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,10 +114,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc367c8cdfd19d428934057ed309d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 100
-  movementSpeedMaxWalk: 5
-  movementSpeedMaxSprint: 10
-  rb: {fileID: 0}
+  movementSpeed: 10
+  movementSpeedMaxWalk: 2
+  movementSpeedMaxSprint: 3
+  rb: {fileID: 2093416441412954624}
 --- !u!114 &2155081722553390734
 MonoBehaviour:
   m_ObjectHideFlags: 0

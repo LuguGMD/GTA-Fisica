@@ -25,7 +25,12 @@ public class PlayerAnimationsHandler : MonoBehaviour
         if (animator != null)
         {
             if(animator.enabled)
-            animator.SetFloat("Speed", speed);
+            {
+                float speed = Mathf.Lerp(animator.GetFloat("Speed"), this.speed, Time.deltaTime*10);
+                if (Mathf.Abs(speed - this.speed) <= 0.1) speed = this.speed;
+                animator.SetFloat("Speed", speed);
+            }
+            
         }
     }
 

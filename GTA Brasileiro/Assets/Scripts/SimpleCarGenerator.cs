@@ -140,7 +140,7 @@ public class SimpleCarGenerator : MonoBehaviour
 
             // 3.4) Adicionar componente WheelControl e configurar flags
             WheelController wcScript = wheelGO.AddComponent<WheelController>();
-            wcScript.wheelModel = visual.transform;
+            wcScript.wheelModels[0] = visual.transform;
             // Steerable apenas nas rodas da frente (índices 0 e 1)
             wcScript.steerable = (i == 0 || i == 1);
             // Motorized em todas (para simplificar, carro 4WD); se quiser só traseira, coloque (i>=2)

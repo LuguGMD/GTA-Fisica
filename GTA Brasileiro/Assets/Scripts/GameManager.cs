@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 
     public void CreateDeathCanvas()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true; 
         Instantiate(deathCanvas);
     }
 }

@@ -33,4 +33,6 @@ public class ActionsManager
 
     public Action onPlayerRagdollActivate;
     public Action onPlayerRagdollDeactivate;
+
+    public Action<float, Vector3> onPlayerChangeSpeed;
 }

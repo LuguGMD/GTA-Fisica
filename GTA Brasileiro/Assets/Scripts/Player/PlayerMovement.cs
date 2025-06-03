@@ -29,6 +29,12 @@ public class PlayerMovement : MonoBehaviour
         private set { currentMaxSpeed = value; }
     }
 
+    public bool getIsSprinting
+    {
+        get { return isSprinting; }
+        private set { isSprinting = value; }
+    }
+
     #endregion
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -102,7 +108,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Quaternion rotation = transform.rotation;
         transform.LookAt(transform.position + direction);
-        transform.rotation = Quaternion.Lerp(rotation, transform.rotation, rb.linearVelocity.magnitude*Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(rotation, transform.rotation, rb.linearVelocity.magnitude*Time.deltaTime*2);
     }
 
     public void PointTowardsCamera()

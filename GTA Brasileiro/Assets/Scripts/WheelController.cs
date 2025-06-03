@@ -8,7 +8,7 @@ using UnityEngine;
 public class WheelController : MonoBehaviour
 {
     [HideInInspector] public WheelCollider WheelCollider;
-    public Transform wheelModel;    // arraste/associe o cilindro criado
+    public Transform[] wheelModels;    // arraste/associe o cilindro criado
     public bool steerable = false;  // setado no CarGenerator
     public bool motorized = false;  // setado no CarGenerator
 
@@ -25,11 +25,15 @@ public class WheelController : MonoBehaviour
         // Obtém a posição e rotação do WheelCollider no mundo
         WheelCollider.GetWorldPose(out wheelPosition, out wheelRotation);
 
-        // Aplica no cilindro visual
-        if (wheelModel != null)
+        for (int i = 0; i < wheelModels.Length; i++)
         {
-            wheelModel.position = wheelPosition;
-            wheelModel.rotation = wheelRotation;
+            // Aplica no cilindro visual
+            if (wheelModels[i] != null)
+            {
+                wheelModels[i].position = wheelPosition;
+                wheelModels[i].rotation = wheelRotation;
+            }
         }
+        
     }
 }

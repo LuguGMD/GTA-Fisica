@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Controle de movimento do carro:
@@ -8,6 +9,12 @@ using UnityEngine;
 /// </summary>
 public class CarController : MonoBehaviour
 {
+    public Transform playerExitCarPoint;
+
+    [Header("Parâmetros de batida")]
+    public float crashSpeed = 10f;
+    public Transform playerCrashExitPoint;
+
     [Header("Parâmetros de Força")]
     public float motorTorque = 2000f;
     public float brakeTorque = 2000f;
@@ -42,12 +49,14 @@ public class CarController : MonoBehaviour
         // Se o jogador apertar E e sua distância do carro for menor que 3, entra no carro
         if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.E))
         {
-            if (Vector3.Distance(playerController.transform.position, transform.position) < 1f)
+            if (Vector3.Distance(playerController.transform.position, transform.position) < 2f)
             {
-                Debug.Log("Player entered car");
                 playerController.EnterCar();
                 isPlayerControlled = false;
                 ActionsManager.Instance.onPlayerEnterCar?.Invoke();
+
+                freeLookCamera.LookAt = transform;
+                freeLookCamera.Follow = transform;
                 return;
             }
         }
@@ -61,9 +70,8 @@ public class CarController : MonoBehaviour
                 return;
             }
 
-            Debug.Log("Player exited car");
-
-            playerController.ExitCar();
+            playerController.ExitCar(playerExitCarPoint);
+            ActionsManager.Instance.onPlayerExitCar?.Invoke();
             isPlayerControlled = true;
             return;
         }
@@ -71,15 +79,18 @@ public class CarController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isPlayerControlled)
+        float vInput = 0; // W/S ou ↑/↓
+        float hInput = 0; // A/D ou ←/→
+                        // Input padrão (setas ou WASD)
+
+        if (!isPlayerControlled)
         {
-            return;
+            vInput = Input.GetAxis("Vertical");
+            hInput = Input.GetAxis("Horizontal");
         }
         // If presses E, exit car
 
-        float vInput = Input.GetAxis("Vertical");   // W/S ou ↑/↓
-        float hInput = Input.GetAxis("Horizontal"); // A/D ou ←/→
-                                                    // Input padrão (setas ou WASD)
+        
 
         // Calcula velocidade atual na direção dianteira do carro
         float forwardSpeed = Vector3.Dot(transform.forward, rb.linearVelocity);
@@ -131,6 +142,21 @@ public class CarController : MonoBehaviour
             playerController.EnterCar();
             freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
             freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
+        }
+        else
+        {
+            float impactSpeed = collision.relativeVelocity.magnitude;
+            if (impactSpeed >= crashSpeed && !isPlayerControlled)
+            {
+                
+
+                isPlayerControlled = true;
+                playerController.ExitCar(playerCrashExitPoint);
+                ActionsManager.Instance.onPlayerExitCar?.Invoke();
+                ActionsManager.Instance.onPlayerChangeSpeed(impactSpeed, -collision.relativeVelocity.normalized);
+                ActionsManager.Instance.onPlayerDeath?.Invoke();
+            }
+            
         }
 
     }
