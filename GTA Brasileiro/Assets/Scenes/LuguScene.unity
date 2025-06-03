@@ -2988,13 +2988,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 525445968123400107, guid: 82e418a4d779b89488d76bc3bae6971e, type: 3}
-      propertyPath: maxSpeed
-      value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 525445968123400107, guid: 82e418a4d779b89488d76bc3bae6971e, type: 3}
-      propertyPath: crashSpeed
-      value: 20
-      objectReference: {fileID: 0}
+      propertyPath: freeLookCamera
+      value: 
+      objectReference: {fileID: 1316875329}
     - target: {fileID: 1963782003395252539, guid: 82e418a4d779b89488d76bc3bae6971e, type: 3}
       propertyPath: m_Name
       value: Car
