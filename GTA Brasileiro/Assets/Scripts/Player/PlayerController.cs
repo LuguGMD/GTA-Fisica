@@ -15,9 +15,6 @@ public class PlayerController : MonoBehaviour
     private float impactSpeed;
     private Vector3 impactDirection = new Vector3();
 
-    private float impactSpeed;
-    private Vector3 impactDirection = new Vector3();
-
     #region Properties
 
     public PlayerMovement getPlayerMovement
