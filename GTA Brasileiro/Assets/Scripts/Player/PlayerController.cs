@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerRagdoll playerRagdoll;
     private PlayerAnimationsHandler playerAnimations;
+
+    [SerializeField] private LayerMask raycastIgnore;
         [SerializeField]
 
     private Unity.Cinemachine.CinemachineCamera freeLookCamera;
@@ -109,7 +111,7 @@ public class PlayerController : MonoBehaviour
         float distance = (targetPos - startRay).magnitude;
 
         RaycastHit hit;
-        if(Physics.Raycast(startRay, direction, out hit, distance))
+        if(Physics.Raycast(startRay, direction, out hit, distance,~raycastIgnore))
         {
             targetPos = hit.point - (direction*0.5f);
         }
