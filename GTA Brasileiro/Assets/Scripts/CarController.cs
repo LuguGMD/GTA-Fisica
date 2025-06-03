@@ -126,7 +126,7 @@ public class CarController : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             ActionsManager.Instance.onPlayerEnterCar?.Invoke();
-            collision.transform.SetParent(transform);
+            // collision.transform.SetParent(transform);
             isPlayerControlled = false;
             playerController.EnterCar();
             freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro

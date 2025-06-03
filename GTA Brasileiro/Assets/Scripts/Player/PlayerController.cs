@@ -47,14 +47,24 @@ public class PlayerController : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerRagdoll = GetComponent<PlayerRagdoll>();
         playerAnimations = GetComponent<PlayerAnimationsHandler>();
- freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
-            freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
+        freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
+        freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
         ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
+        Cursor.lockState = CursorLockMode.Locked; // Trava o cursor no centro da tela
+        Cursor.visible = false; // Torna o cursor invisível
     }
 
     private void OnDisable()
     {
         ActionsManager.Instance.onPlayerRagdollActivate -= SendLaunchForceToRagdoll;
+    }
+
+    private void OnEnable()
+    {
+        ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
+         freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
+            freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
+        ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
     }
 
     private void Update()
@@ -73,13 +83,16 @@ public class PlayerController : MonoBehaviour
     public void EnterCar()
     {
         // Faça o mesh renderer do player ficar invisível
-        gameObject.SetActive(false);
+        playerRagdoll.DeactivateRagdoll(); // Desativa o ragdoll do player
+                                           // Desativa o game object do filho
+        transform.GetChild(0).gameObject.SetActive(false); // Desativa o mesh renderer do player
+
     }
 
     public void ExitCar()
     {
         // Reative o mesh renderer do player
-        gameObject.SetActive(true);
+        transform.GetChild(0).gameObject.SetActive(true); // Desativa o mesh renderer do player
         transform.position =  new Vector3(transform.position.x, transform.position.y, transform.position.z - 5); // Ajusta a altura do player ao sair do carro
             freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
             freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
