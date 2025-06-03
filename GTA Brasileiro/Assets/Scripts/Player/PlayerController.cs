@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     private float impactSpeed;
     private Vector3 impactDirection = new Vector3();
 
+    private float impactSpeed;
+    private Vector3 impactDirection = new Vector3();
+
     #region Properties
 
     public PlayerMovement getPlayerMovement
@@ -47,16 +50,21 @@ public class PlayerController : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerRagdoll = GetComponent<PlayerRagdoll>();
         playerAnimations = GetComponent<PlayerAnimationsHandler>();
+
         freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
         freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
         ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
         Cursor.lockState = CursorLockMode.Locked; // Trava o cursor no centro da tela
         Cursor.visible = false; // Torna o cursor invisível
+
+        ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
+
     }
 
     private void OnDisable()
     {
         ActionsManager.Instance.onPlayerRagdollActivate -= SendLaunchForceToRagdoll;
+
     }
 
     private void OnEnable()
@@ -65,6 +73,7 @@ public class PlayerController : MonoBehaviour
          freeLookCamera.LookAt = transform; // Ajusta a câmera para olhar para o carro
             freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
         ActionsManager.Instance.onPlayerRagdollActivate += SendLaunchForceToRagdoll;
+
     }
 
     private void Update()
@@ -78,7 +87,6 @@ public class PlayerController : MonoBehaviour
     {
         playerRagdoll.LaunchRagdoll(impactSpeed, impactDirection);
     }
-
 
     public void EnterCar()
     {
@@ -98,6 +106,5 @@ public class PlayerController : MonoBehaviour
             freeLookCamera.Follow = transform; // Ajusta a câmera para seguir o carro
 
     }
-
 
 }

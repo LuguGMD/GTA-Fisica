@@ -61,7 +61,6 @@ public class PlayerInputs : MonoBehaviour
 
     private void Move(InputAction.CallbackContext context)
     {
-        Debug.Log("Move Input Received");
         moveInput = context.ReadValue<Vector2>();
         ActionsManager.Instance.onPlayerMoveInput?.Invoke(moveInput);
     }
@@ -82,10 +81,6 @@ public class PlayerInputs : MonoBehaviour
     {
         doInteractInput = context.ReadValue<float>();
         ActionsManager.Instance.onPlayerInteractInput?.Invoke(doInteractInput);
-        
-        //DEBUG REMOVE
-        Debug.LogWarning("Remove This");
-        ActionsManager.Instance.onPlayerDeath.Invoke();
     }
 
     public void DisableInputs()
